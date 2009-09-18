@@ -45,7 +45,7 @@ static int winWidth = 1024, winHeight = 768; ///< Window size
 
 static int buttonPressed = -1; ///< Button state
 
-static int modelId = 0; ///< Current model to be drawn
+static int modelId = 1; ///< Current model to be drawn
 static const int NUM_MODELS = 3;
 
 static bool showInfo = true, showHelp = false; ///< Show information or help flags
@@ -81,7 +81,7 @@ static const char fsFile[NUM_SHADERS][255] = { "helloworld.frag", "simple.frag",
 static int textureId = 0;
 static const int NUM_TEXTURES = 4;
 static const char textureFile[NUM_TEXTURES][255] = { "sib09logo.jpg", "earth.jpg", 
-								"monet.jpg", "Ore.jpg"};
+								"monet.jpg", "ore.jpg"};
 
 /// ------------------------------------   ARCBALL   --------------------------------------
 
