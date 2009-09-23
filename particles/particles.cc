@@ -84,6 +84,40 @@ void glWrite( const GLdouble& x, const GLdouble& y, const char *str ) {
 
 }
 
+/// Show Information/Help
+
+void showIH( void ) {
+
+	glColor3f(0.0, 0.0, 0.0);
+
+	char str[256];
+	
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();	
+	glLoadIdentity();
+	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();	
+	glLoadIdentity();
+	
+	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
+	sprintf(str, "Keys" );
+	glWrite(-0.95, 0.9, str);
+	
+	sprintf(str, "[ / ] : point size" );
+	glWrite(-0.95, 0.8, str);
+
+	sprintf(str, "+ / - : animation speed" );
+	glWrite(-0.95, 0.7, str);
+
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+
+
+}
+
 
 inline vec rotate_x( vec v, float sin_ang, float cos_ang )
 {
@@ -293,6 +327,8 @@ void display( void ) {
 	
 	glColor3f(0.0, 0.0, 0.0);
 	drawBoundingBox();
+	
+	showIH();
 	
 	delete [] tex_data;
 		
