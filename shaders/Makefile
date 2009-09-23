@@ -6,13 +6,13 @@
 
 CXX = g++
 
-INCLUDES = -I./
+INCLUDES = -I./ -I../libs/
 
 FLAGS = -O3 -ffast-math -Wno-deprecated $(INCLUDES)
 
 LIBS = -lGL -lGLU -lglut -ljpeg
 
-OBJS = shaders.o glslKernel.o GLee.o arcball.o jpeg.o
+OBJS = shaders.o ../libs/glslKernel.o ../libs/GLee.o ../libs/arcball.o ../libs/jpeg.o
 
 APP = shaders
 
