@@ -250,9 +250,10 @@ void display( void ) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+	showIH();
 
 	if( showHelp ) {
-		showIH();
+		
 		glutSwapBuffers();
 		return;
 	}
