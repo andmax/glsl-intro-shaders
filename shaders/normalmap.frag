@@ -14,7 +14,7 @@ uniform bool applyTex;
 
 void main(void) {
 	
-    vec3 texel = texture2D( normalMapTex, -vec2(gl_TexCoord[0].s, gl_TexCoord[0].t) ).rgb;
+    vec3 texel = texture2D( normalMapTex, vec2(gl_TexCoord[0].s, gl_TexCoord[0].t) ).rgb;
 
     if( !applyTex ) {
         gl_FragColor = vec4(texel, 1.0);

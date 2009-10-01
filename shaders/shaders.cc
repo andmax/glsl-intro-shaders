@@ -15,16 +15,17 @@
 
 #include "materials.h" // color materials constants
 
-#include <cstdio> // standard i/o
+//#include <cstdio> // standard i/o
 
-extern "C" {
+#include <stdio.h>
+
+
 #include <GL/glut.h> // gl-utility library
-#include <jpeglib.h>
-}
+
 
 #include "arcball.h"
 
-#include "jpeg.h"
+#include "pbmpak.h"
 
 #include <iostream> // i/o stream
 
@@ -36,6 +37,7 @@ using std::cout;
 using std::cerr;
 using std::flush;
 using std::endl;
+
 
 /// ------------------------------------   Variables   --------------------------------------
 
@@ -80,8 +82,8 @@ static const char fsFile[NUM_SHADERS][255] = { "helloworld.frag", "simple.frag",
 
 static int textureId = 0;
 static const int NUM_TEXTURES = 4;
-static const char textureFile[NUM_TEXTURES][255] = { "sib09logo.jpg", "earth.jpg", 
-								"monet.jpg", "ore.jpg"};
+static const char textureFile[NUM_TEXTURES][255] = { "sib09logo.ppm", "earth.ppm", 
+								"monet.ppm", "ore.ppm"};
 
 /// ------------------------------------   ARCBALL   --------------------------------------
 
@@ -602,13 +604,15 @@ void motion( int x, int y ) {
 
 }
 
-
 void setupTexture ( int t ) {
-		
-	
-	int jpeg_w, jpeg_h, jpeg_c;
+	int xsize, ysize, max;
 
-	unsigned char* tex_img = jpeg_load(textureFile[t], &jpeg_w, &jpeg_h, &jpeg_c);
+  	FILE *filein;
+  	filein = fopen ( textureFile[t], "r" );
+
+	ppma_read_header ( filein, &xsize, &ysize, &max );
+	unsigned char *tex_img =  new unsigned char[xsize*ysize*3];
+	ppma_read_data ( filein, xsize, ysize, tex_img );
 	
 	glGenTextures(1, &tex_normalmap);
 	glActiveTexture(GL_TEXTURE2);
@@ -618,10 +622,9 @@ void setupTexture ( int t ) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, jpeg_w, jpeg_h, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_img);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xsize, ysize, 0, GL_RGB, GL_UNSIGNED_BYTE, &tex_img[0]);
 
 	delete [] tex_img;
-
 }
 
 
@@ -670,33 +673,36 @@ void setupGL( void ) {
 
 	//char* tex_img = openJpeg("envmap1.jpg");
 	int jpeg_w, jpeg_h, jpeg_c;
-	unsigned char* tex_img = jpeg_load("envmap.jpg", &jpeg_w, &jpeg_h, &jpeg_c);
-
-	glGenTextures(1, &tex_envmap);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex_envmap);
 	
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//~ CImg<unsigned char> tex_img("envmap.jpg");
+	//~ //unsigned char* tex_img = jpeg_load("envmap.jpg", &jpeg_w, &jpeg_h, &jpeg_c);
+//~ 
+	//~ glGenTextures(1, &tex_envmap);
+	//~ glActiveTexture(GL_TEXTURE0);
+	//~ glBindTexture(GL_TEXTURE_2D, tex_envmap);
+	//~ 
+	//~ glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//~ 
+	//~ glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_img.dimx(), tex_img.dimy(), 0, GL_RGB, GL_UNSIGNED_BYTE, tex_img.data);
+//~ 
+	//~ //delete [] tex_img;
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 1024, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_img);
+	//~ //tex_img = jpeg_load("envmap.jpg", &jpeg_w, &jpeg_h, &jpeg_c);
+	//~ //CImg<unsigned char> tex_img("envmap.jpg");
+//~ 
+	//~ glGenTextures(1, &tex_envmap2);
+	//~ glActiveTexture(GL_TEXTURE1);
+	//~ glBindTexture(GL_TEXTURE_2D, tex_envmap2);
+//~ 
+	//~ glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//~ 
+	//~ glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_img.dimx(), tex_img.dimy(), 0, GL_RGB, GL_UNSIGNED_BYTE, tex_img.data);
 
-	delete [] tex_img;
-
-	tex_img = jpeg_load("envmap.jpg", &jpeg_w, &jpeg_h, &jpeg_c);
-
-	glGenTextures(1, &tex_envmap2);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, tex_envmap2);
-
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, jpeg_w, jpeg_h, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_img);
-
-	delete [] tex_img;
+	//delete [] tex_img;
 
 	setupTexture(textureId);	
 
