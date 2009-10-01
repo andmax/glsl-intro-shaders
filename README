@@ -1,0 +1,28 @@
+************
+** README **
+************
+
+** Hints for running glsl-intro-shaders project in:
+
+** Mac Mini
+** MAC OS X 1.5 Leopard version
+
+** Create symbolic link on /usr/include to OpenGL path
+
+$ cd /usr/include
+$ sudo ln -s /System/Library/Frameworks/OpenGL.framework/Headers GL
+
+** Install GLUT
+
+$ sudo port install glut
+
+http://developer.apple.com/mac/library/samplecode/glut/index.html
+
+** Download the zip, uncompress and follow ReadMe.txt
+
+** Install glew
+
+$ sudo port install glew
+
+** Change Makefile to add MAC_FLAG and MAC_LINK
+

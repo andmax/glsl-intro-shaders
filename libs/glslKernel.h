@@ -24,7 +24,11 @@
 #ifndef __GLSL__KERNEL__
 #define __GLSL__KERNEL__
 
+#ifdef __MAC__
+#include <GL/glew.h>
+#else
 #include <GLee.h> ///< You need GLee in a default include directory
+#endif
 
 /// Tells whether the system support OpenGL SL capabilities
 /// @return true if the system is ready for OpenGL SL

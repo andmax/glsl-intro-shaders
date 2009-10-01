@@ -6,13 +6,20 @@
 
 CXX = g++
 
+MAC_FLAG = -I/opt/local/include -D__MAC__
+
+MAC_LINK = -framework GLUT -framework OpenGL -L/opt/local/lib \
+	-L"/Library/Frameworks/GLUT.framework" -L"/System/Library/Frameworks/OpenGL.framework/Libraries" \
+	-lGL -lGLU -lGLEW -lm -lobjc -lstdc++
+
 INCLUDES = -I./ -I../libs/
 
-FLAGS = -O3 -ffast-math -Wno-deprecated $(INCLUDES)
+FLAGS = -O3 -ffast-math -Wno-deprecated $(INCLUDES) $(MAC_FLAG)
 
-LIBS = -lGL -lGLU -lglut
+LIBS = $(MAC_LINK)
+#LIBS = -lGL -lGLU -lglut
 
-OBJS = particles.o ../libs/glslKernel.o ../libs/GLee.o ../libs/arcball.o
+OBJS = particles.o ../libs/glslKernel.o ../libs/arcball.o #../libs/GLee.o
 
 APP = particles
 
@@ -28,6 +35,10 @@ depend:		$*.cc
 	$(CXX) -M $(FLAGS) $*.cc > .depend
 
 %.o:		%.cc
+	@echo "Compiling ..."
+	$(CXX) $(FLAGS) -o $@ -c $<
+
+%.o:		%.cpp
 	@echo "Compiling ..."
 	$(CXX) $(FLAGS) -o $@ -c $<
 

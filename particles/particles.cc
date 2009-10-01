@@ -15,7 +15,11 @@
 #include <cstdio> // standard i/o
 
 extern "C" {
+#ifdef __MAC__
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h> // gl-utility library
+#endif
 }
 
 #include "arcball.h"
@@ -537,6 +541,13 @@ void setupGL( void ) {
 	glutInitWindowSize(winWidth, winHeight);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow(titleWin);
+
+#ifdef __MAC__
+	if( GLEW_OK != glewInit() ) {
+	  cerr << "glew failed" << endl;
+	  exit(1);
+	}
+#endif
 
 	glClearColor(1., 1., 1., 0.);
 
