@@ -12,6 +12,10 @@
 
 #include "glslKernel.h" // using lcg glsl kernel
 
+#ifdef __WIN32__
+#define GLUT_DISABLE_ATEXIT_HACK // for compiling with Mingw
+#endif
+
 extern "C" {
 #ifdef __MAC__
 #include <GLUT/glut.h>
