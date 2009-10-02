@@ -28,11 +28,19 @@ Compile:
 
     $ make
 
-    -= Compile only shaders or particles=-
+    -= Compile only shaders or particles =-
 
-    $ make shaders
+    $ make bin/shaders
 
-    $ make particles
+    $ make bin/particles
+
+    -= Run programs going inside bin/ =-
+
+    $ cd bin
+
+    $ ./particles
+
+    $ ./shaders
 
 Mac OS X:
 
