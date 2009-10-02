@@ -25,11 +25,14 @@ extern "C" {
 
 #include <stdio.h>
 #include <math.h> 
-#include "pbmpak.h"
 
 #include "arcball.h"
 
 #include <iostream> // i/o stream
+
+/// for reading the ppm files
+#include <string>
+#include <fstream>
 
 #define NUM_SHADERS 7
 
@@ -37,7 +40,8 @@ using std::cout;
 using std::cerr;
 using std::flush;
 using std::endl;
-
+using std::string;
+using std::ifstream;
 
 /// ------------------------------------   Variables   --------------------------------------
 
@@ -604,27 +608,55 @@ void motion( int x, int y ) {
 
 }
 
-void setupTexture ( int t ) {
-	int xsize, ysize, max;
+void readTextureFile(  char* name , GLuint texId) {
+	string x;
+	ifstream inFile;
 
-  	FILE *filein;
-  	filein = fopen ( textureFile[t], "r" );
+	inFile.open(name);
+	if (!inFile) {
+		cout << "Unable to open file " << name << endl;
+		return;
+		//exit(1); // terminate with error
+	}
 
-	ppma_read_header ( filein, &xsize, &ysize, &max );
-	unsigned char *tex_img =  new unsigned char[xsize*ysize*3];
-	ppma_read_data ( filein, xsize, ysize, tex_img );
+	string header;
+	getline(inFile, header);	
+	getline(inFile, header);
 	
-	glGenTextures(1, &tex_normalmap);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, tex_normalmap);
+	int xsize, ysize, c;
+	
+	inFile >> xsize;
+	inFile >> ysize;
+	inFile >> c; //max	
+
+	unsigned char *tex_img = new unsigned char[xsize*ysize*3];
+
+	int pos = 0;
+	while (inFile >> c) {
+		tex_img[pos] = (unsigned char)c;
+		pos++;
+	}
+	
+	glGenTextures(1, &texId);
+	glBindTexture(GL_TEXTURE_2D, texId);
 
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, xsize, ysize, 0, GL_RGB, GL_UNSIGNED_BYTE, &tex_img[0]);
+	
+	delete [] tex_img;	
 
-	delete [] tex_img;
+	inFile.close();
+
+}
+
+
+void setupTexture ( int t ) {
+
+	glActiveTexture(GL_TEXTURE2);
+	readTextureFile((char*)textureFile[t], tex_normalmap);
 }
 
 
@@ -678,38 +710,8 @@ void setupGL( void ) {
 		arot[i] = aang[i] = 0.;
 	zoom = 1.;
 
-	//char* tex_img = openJpeg("envmap1.jpg");
-	int jpeg_w, jpeg_h, jpeg_c;
-	
-	//~ CImg<unsigned char> tex_img("envmap.jpg");
-	//~ //unsigned char* tex_img = jpeg_load("envmap.jpg", &jpeg_w, &jpeg_h, &jpeg_c);
-//~ 
-	//~ glGenTextures(1, &tex_envmap);
-	//~ glActiveTexture(GL_TEXTURE0);
-	//~ glBindTexture(GL_TEXTURE_2D, tex_envmap);
-	//~ 
-	//~ glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//~ 
-	//~ glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_img.dimx(), tex_img.dimy(), 0, GL_RGB, GL_UNSIGNED_BYTE, tex_img.data);
-//~ 
-	//~ //delete [] tex_img;
-
-	//~ //tex_img = jpeg_load("envmap.jpg", &jpeg_w, &jpeg_h, &jpeg_c);
-	//~ //CImg<unsigned char> tex_img("envmap.jpg");
-//~ 
-	//~ glGenTextures(1, &tex_envmap2);
-	//~ glActiveTexture(GL_TEXTURE1);
-	//~ glBindTexture(GL_TEXTURE_2D, tex_envmap2);
-//~ 
-	//~ glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//~ 
-	//~ glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_img.dimx(), tex_img.dimy(), 0, GL_RGB, GL_UNSIGNED_BYTE, tex_img.data);
-
-	//delete [] tex_img;
+	glActiveTexture(GL_TEXTURE0);
+	readTextureFile((char*)"envmap.ppm", tex_envmap);
 
 	setupTexture(textureId);	
 

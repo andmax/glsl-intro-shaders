@@ -27,8 +27,8 @@ LIBS = -lGL -lGLU -lglut
 #---- External Sources and Objects ----
 
 # Eable GLee.c if not using GLEW
-EXT_SRCS = lib/pbm/pbmpak.c lib/arcball/arcball.cpp lib/glslKernel/glslKernel.cc lib/GL/GLee.c
-EXT_OBJS = obj/pbmpak.o obj/arcball.o obj/glslKernel.o obj/GLee.o
+EXT_SRCS = lib/arcball/arcball.cpp lib/glslKernel/glslKernel.cc lib/GL/GLee.c
+EXT_OBJS = obj/arcball.o obj/glslKernel.o obj/GLee.o
 
 #---- Sources and Objects ----
 
@@ -57,10 +57,6 @@ $(SHADER_OBJ):		$(SHADER_SRC)
 	$(CXX) $(FLAGS) -o $@ -c $<
 
 $(PARTICLE_OBJ):	$(PARTICLE_SRC)
-	@echo "Compiling ..."
-	$(CXX) $(FLAGS) -o $@ -c $<
-
-obj/pbmpak.o:		lib/pbm/pbmpak.c
 	@echo "Compiling ..."
 	$(CXX) $(FLAGS) -o $@ -c $<
 
