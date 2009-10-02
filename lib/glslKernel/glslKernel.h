@@ -24,7 +24,7 @@
 #ifndef __GLSL__KERNEL__
 #define __GLSL__KERNEL__
 
-#ifdef __MAC__
+#ifdef __GLEW__
 #include <GL/glew.h>
 #else
 #include <GLee.h> ///< You need GLee in a default include directory

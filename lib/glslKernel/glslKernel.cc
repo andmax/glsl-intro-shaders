@@ -43,20 +43,20 @@ using namespace std;
 /// Tells whether the system support OpenGL SL capabilities
 /// @return true if the system is ready for OpenGL SL
 bool glsl_support() { 
-#ifdef __MAC__
-  return true;
+#ifdef __GLEW__
+	return (GL_VERSION_2_0);
 #else
-  return (GLEE_VERSION_2_0);
+	return (GLEE_VERSION_2_0);
 #endif
 }
 
 /// Tells whether graphics board support Geometry Shader
 /// @return true if the graphics board could run Geometry Shader
 bool geom_shader_support () { 
-#ifdef __MAC__
-  return true;
+#ifdef __GLEW__
+	return (GL_EXT_geometry_shader4);
 #else
-  return (GLEE_EXT_geometry_shader4);
+	return (GLEE_EXT_geometry_shader4);
 #endif
 }
 

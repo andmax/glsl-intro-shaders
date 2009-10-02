@@ -12,8 +12,6 @@
 
 #include "glslKernel.h" // using lcg glsl kernel
 
-#include <cstdio> // standard i/o
-
 extern "C" {
 #ifdef __MAC__
 #include <GLUT/glut.h>
@@ -22,12 +20,13 @@ extern "C" {
 #endif
 }
 
+#include <math.h> 
+#include <stdio.h> // standard i/o
+#include <stdlib.h>
+
 #include "arcball.h"
 
-
 #include <iostream> // i/o stream
-
-#include <math.h> 
 
 #define TEXTURE_TYPE GL_RGBA32F_ARB
 
@@ -233,7 +232,7 @@ void computeCinematics( void ) {
 	
 	
 	glViewport(0, 0, tex_size, tex_size);
-    glMatrixMode(GL_PROJECTION);
+	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();	
 	glLoadIdentity();
 	
@@ -542,7 +541,7 @@ void setupGL( void ) {
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow(titleWin);
 
-#ifdef __MAC__
+#ifdef __GLEW__
 	if( GLEW_OK != glewInit() ) {
 	  cerr << "glew failed" << endl;
 	  exit(1);

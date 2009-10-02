@@ -1,28 +1,63 @@
-************
-** README **
-************
+*************************************************************************
+**                                                                     **
+**               Introduction to GPU Programming with GLSL             **
+**                                                                     **
+**                              README File                            **
+**                                                                     **
+*************************************************************************
 
-** Hints for running glsl-intro-shaders project in:
+    This application demo shows some basic functionalities of shaders
+    using GLSL.  The demo was developed as a tutorial named:
+    "Introduction to GPU Programming with GLSL"; for SIBGRAPI 2009
+    conference: http://www.matmidia.mat.puc-rio.br/sibgrapi2009/.
 
-** Mac Mini
-** MAC OS X 1.5 Leopard version
+Directories:
 
-** Create symbolic link on /usr/include to OpenGL path
+    bin/            :- output binaries
+    include/        :- header files
+    lib/            :- external libraries
+        GL/         :- GLee (http://elf-stone.com/glee.php)
+        glslKernel/ :- GLSL Kernel (http://code.google.com/p/lcgtk)
+        pbm/        :- PBM (http://orion.math.iastate.edu/burkardt/g_src/pbmpak/pbmpak.html)
+	arcball/    :- Arcball external code
+    src/            :- source codes
 
-$ cd /usr/include
-$ sudo ln -s /System/Library/Frameworks/OpenGL.framework/Headers GL
+Compile:
 
-** Install GLUT
+    -= Compile both programs =-
 
-$ sudo port install glut
+    $ make
 
-http://developer.apple.com/mac/library/samplecode/glut/index.html
+    -= Compile only shaders or particles=-
 
-** Download the zip, uncompress and follow ReadMe.txt
+    $ make shaders
 
-** Install glew
+    $ make particles
 
-$ sudo port install glew
+Mac OS X:
 
-** Change Makefile to add MAC_FLAG and MAC_LINK
+    We tested our code on a Mac Mini (MAC OS X 1.5 Leopard version)
+    successfully.  Here are some hints in order to do this:
 
+    -= Install missing packages using Mac Ports =-
+
+    -= Install GLUT =-
+
+    $ sudo port install glut
+
+    -= Access website =-
+
+    http://developer.apple.com/mac/library/samplecode/glut/index.html
+
+    -= Download the zip, uncompress and follow ReadMe.txt =-
+
+    -= Install GLEW =-
+
+    $ sudo port install glew
+
+    -= Change Makefile to add MAC_FLAG and MAC_LINK =-
+
+Authors:
+
+    Maximo, Andre -- andmax@gmail.com
+    Marroquim, Ricardo -- ricardo.marroquim@gmail.com

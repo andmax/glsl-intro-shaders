@@ -1,4 +1,6 @@
 /*  pbmpak.h  21 June 1999 */
+#ifndef __PBMPAK__
+#define __PBMPAK__
 
 #include <stdio.h>
 
@@ -86,3 +88,5 @@ int  ppmb_write_data ( FILE *fileout, int xsize, int ysize, int *rarray,
        int *garray, int *barray );
 int  ppmb_write_header ( FILE *fileout, int xsize, int ysize, int maxrgb );
 int  ppmb_write_test ( char *fileout_name );
+
+#endif

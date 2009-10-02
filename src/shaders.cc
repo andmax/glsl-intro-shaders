@@ -15,23 +15,21 @@
 
 #include "materials.h" // color materials constants
 
-//#include <cstdio> // standard i/o
-
-#include <stdio.h>
-
+extern "C" {
 #ifdef __MAC__
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h> // gl-utility library
 #endif
+}
+
+#include <stdio.h>
+#include <math.h> 
+#include "pbmpak.h"
 
 #include "arcball.h"
 
-#include "pbmpak.h"
-
 #include <iostream> // i/o stream
-
-#include <math.h> 
 
 #define NUM_SHADERS 7
 
@@ -640,7 +638,7 @@ void setupGL( void ) {
 	glutInitWindowPosition(32, 32);
 	glutCreateWindow(titleWin);
 
-#ifdef __MAC__
+#ifdef __GLEW__
 	if( GLEW_OK != glewInit() ) {
 	  cerr << "glew failed" << endl;
 	  exit(1);
