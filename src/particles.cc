@@ -393,7 +393,8 @@ void keyboard( unsigned char key, int x, int y ) {
 		return;					
 		
 	case 'q': case 'Q': case 27: // quit application
-		glutDestroyWindow( glutGetWindow() );
+		//glutDestroyWindow( glutGetWindow() );
+		exit(0);
 		return;
 	default: // any other key (just to avoid warnings)
 		cerr << "[Error] No key bind for " << key
