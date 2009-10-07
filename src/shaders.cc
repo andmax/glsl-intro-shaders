@@ -126,6 +126,12 @@ void glWrite( const GLdouble& x, const GLdouble& y, const char *str ) {
 
 void showIH( void ) {
 
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+
 	glColor3ub(0, 0, 0);
 
 	if( light ) glDisable(GL_LIGHTING);
@@ -201,6 +207,10 @@ void showIH( void ) {
 	}
 
 	if( light ) glEnable(GL_LIGHTING);
+
+
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 
 }
 
