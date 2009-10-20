@@ -154,7 +154,8 @@ void showIH( void ) {
 			(currTier==4)?"Brick Shader":
 			(currTier==5)?"Phong Shader":
 			(currTier==6)?"Environment Map Shader":
-			(currTier==7)?"Normal Map Shader":"");
+			(currTier==7)?"Normal Map Shader":
+			(currTier==8)?"Spike Shader":"");
 		glWrite(-0.9, -0.4, str);
 
 		if( currTier > 0 ) {

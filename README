@@ -18,7 +18,6 @@ Directories:
     lib/            :- external libraries
         GL/         :- GLee (http://elf-stone.com/glee.php)
         glslKernel/ :- GLSL Kernel (http://code.google.com/p/lcgtk)
-        pbm/        :- PBM (http://orion.math.iastate.edu/burkardt/g_src/pbmpak/pbmpak.html)
 	arcball/    :- Arcball external code
     src/            :- source codes
 

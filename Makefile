@@ -79,7 +79,7 @@ obj/GLee.o:	lib/GL/GLee.c
 
 clean:
 	@echo "Cleaning..."
-	rm -f $(PARTICLE_APP) $(SHADER_APP) obj/*.o src/*~ include/*~ *~ .depend
+	rm -f $(PARTICLE_APP) $(SHADER_APP) obj/*.o bin/*~ src/*~ include/*~ *~ .depend
 
 depend:		$*.cc
 	@echo "Dependency..."
