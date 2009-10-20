@@ -15,25 +15,23 @@ MAC_LINK = -framework GLUT -framework OpenGL -L/opt/local/lib \
 	-L"/Library/Frameworks/GLUT.framework" -L"/System/Library/Frameworks/OpenGL.framework/Libraries" \
 	-lGL -lGLU -lGLEW -lm -lobjc -lstdc++
 
-#INCLUDES = -Iinclude/ -Ilib/GL -Ilib/glslKernel/ -Ilib/pbm/ -Ilib/arcball
-
 INCLUDES = -Iinclude -Ilib/GL -Ilib/glslKernel -Ilib/arcball
 
 # Enable MAC_FLAGS in MAC
 FLAGS = -O3 -ffast-math -Wno-deprecated $(INCLUDES) $(USE_GLEW) #$(MAC_FLAG)
 
-# Replace LIBS in MAC
+# MAC LIBS
 #LIBS = $(MAC_LINK)
 
-# Replace LIBS for Win
-#LIBS	= -lglu32 -lopengl32 -lglut32 
+# Windows LIBS
+#LIBS = -lglu32 -lopengl32 -lglut32 
 
+# Linux LIBS
 LIBS = -lGL -lGLU -lglut
-
 
 #---- External Sources and Objects ----
 
-# Eable GLee.c if not using GLEW
+# Enable GLee.c if not using GLEW
 EXT_SRCS = lib/arcball/arcball.cpp lib/glslKernel/glslKernel.cc lib/GL/GLee.c
 EXT_OBJS = obj/arcball.o obj/glslKernel.o obj/GLee.o
 

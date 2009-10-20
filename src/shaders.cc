@@ -38,7 +38,7 @@ extern "C" {
 #include <string>
 #include <fstream>
 
-#define NUM_SHADERS 7
+#define NUM_SHADERS 8
 
 using std::cout;
 using std::cerr;
@@ -78,20 +78,20 @@ static bool applyTex = false; ///< Apply texture as normalmap (false) or as text
 // Vertex and Fragment Shader file names
 static const char vsFile[NUM_SHADERS][255] = { "helloworld.vert", "simple.vert", "cartoon.vert",
 					       "brick.vert", "phong.vert", "envmap.vert",
-					       "normalmap.vert" };
+					       "normalmap.vert", "spike.vert" };
 static const char gsFile[NUM_SHADERS][255] = { "helloworld.geom", "simple.geom", "------------",
 					       "----------", "----------", "----------",
-					       "----------" };
+					       "----------", "spike.geom" };
 static const char fsFile[NUM_SHADERS][255] = { "helloworld.frag", "simple.frag", "cartoon.frag",
 					       "brick.frag", "phong.frag", "envmap.frag",
-					       "normalmap.frag" };
+					       "normalmap.frag", "phong.frag" };
 
 /// ------------------------------------   TEXTURES   --------------------------------------
 
 static int textureId = 0;
 static const int NUM_TEXTURES = 4;
-static const char textureFile[NUM_TEXTURES][255] = { "sib09logo.ppm", "earth.ppm", 
-								"monet.ppm", "ore.ppm"};
+static const char textureFile[NUM_TEXTURES][255] = { "sib09logo.ppm", "earth.ppm",
+						     "monet.ppm", "ore.ppm"};
 
 /// ------------------------------------   ARCBALL   --------------------------------------
 
@@ -106,7 +106,6 @@ const float PI = 3.141592654f;
 /// ------------------------------------   Functions   --------------------------------------
 
 void setupTexture ( int t );
-
 
 /// OpenGL Write
 /// @arg x, y raster position
@@ -125,7 +124,6 @@ void glWrite( const GLdouble& x, const GLdouble& y, const char *str ) {
 /// Show Information/Help
 
 void showIH( void ) {
-
 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -180,7 +178,6 @@ void showIH( void ) {
 		sprintf(str, "Resolution: %d x %d", winWidth, winHeight );
 		glWrite(-0.9, -0.8, str);
 
-
 	}
 
 	if( showHelp ) { /// Show help
@@ -214,8 +211,8 @@ void showIH( void ) {
 
 }
 
-inline vec rotate_x( vec v, float sin_ang, float cos_ang )
-{
+inline vec rotate_x( vec v, float sin_ang, float cos_ang ) {
+
 	return vec(
 	    v.x,
 	    (v.y * cos_ang) + (v.z * sin_ang),
@@ -223,8 +220,8 @@ inline vec rotate_x( vec v, float sin_ang, float cos_ang )
 	    );
 }
 
-inline vec rotate_y( vec v, float sin_ang, float cos_ang )
-{
+inline vec rotate_y( vec v, float sin_ang, float cos_ang ) {
+
 	return vec(
 	    (v.x * cos_ang) + (v.z * sin_ang),
 	    v.y,
@@ -234,20 +231,23 @@ inline vec rotate_y( vec v, float sin_ang, float cos_ang )
 
 /// Renders the currently selected model
 /// to insert a new model remember to increment the NUM_MODEL const
+
 void drawModel ( int m ) {
 
-	if (m == 0) {
+	if( m == 0 ) {
+
 		GLUquadric *qobj = gluNewQuadric();
 		gluQuadricTexture(qobj,GL_TRUE);
 		gluSphere(qobj, 1, 150, 150);
 		gluDeleteQuadric(qobj);
-	}
-	else if (m == 1) {
+
+	} else if( m == 1 ) {
 
 		if( wireframe ) glutWireTeapot(1.);
 		else glutSolidTeapot(1.);
-	}
-	else if (m == 2) {
+
+	} else if( m == 2 ) {
+
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0, 0.0);
 		glVertex3f(-0.5, -0.5, 0.0);
@@ -258,17 +258,19 @@ void drawModel ( int m ) {
 		glTexCoord2f(0.0, 1.0);
 		glVertex3f(-0.5,  0.5, 0.0);
 		glEnd();
+
 	}
+
 }
 
 /// Display
 
 void display( void ) {
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	showIH();
 
@@ -278,7 +280,7 @@ void display( void ) {
 		return;
 	}
 
-	///***************LIGHT ***************//
+	//------------------------- LIGHT ----------------------------
 	glPushMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -286,16 +288,14 @@ void display( void ) {
 	glRotatef(arot[2]+aang[2], 1., 0., 0.);
 	glRotatef(arot[3]+aang[3], 0., 1., 0.);
 
-	const GLfloat lp[] = { 0., 8., 64., 1. }; // Light Position
+	const GLfloat lp[] = { 0., 8., 64., 1. }; ///< Light Position
 	glLightfv(GL_LIGHT0, GL_POSITION, lp);
 	glPopMatrix();
-	///************************************//
-
+	//------------------------------------------------------------
 
 	glPushMatrix();
 	glScalef(zoom, zoom, zoom);
-    arcball_rotate();	
-	
+	arcball_rotate();	
 
 	glColor3ub(92, 161, 230);
 
@@ -313,8 +313,6 @@ void display( void ) {
 		glEnable(GL_TEXTURE_2D);
 
 		shTier[5].set_uniform("envMapTex", 0);
-		//shTier[5].set_uniform("envMapTex2", 1);
-
 
 	} else if( currTier == 7 && fsON ) {
 
@@ -344,21 +342,22 @@ void reshape( int w, int h ) {
 	
 	winWidth = w;
 	winHeight = h;
-    float aspect_ratio = (float) winWidth / (float) winHeight;
+	float aspect_ratio = (float) winWidth / (float) winHeight;
 
-    glViewport(0, 0, winWidth, winHeight);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective( 50.0f, aspect_ratio, 1.0f, 50.0f );
-    gluLookAt(
-        eye.x, eye.y, eye.z,
-        centre.x, centre.y, centre.z,
-        up.x, up.y, up.z );
+	glViewport(0, 0, winWidth, winHeight);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective( 50.0f, aspect_ratio, 1.0f, 50.0f );
+	gluLookAt(
+		eye.x, eye.y, eye.z,
+		centre.x, centre.y, centre.z,
+		up.x, up.y, up.z );
+
 	// set up the arcball using the current projection matrix
 	arcball_setzoom( SPHERE_RADIUS, eye, up );
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity() ;	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 }
 
@@ -452,6 +451,14 @@ void keyboard( unsigned char key, int x, int y ) {
 		shTier[6].vertex_source(vsFile[6]);
 		shTier[6].fragment_source(fsFile[6]);
 		shTier[6].install();
+		break;
+	case '8': // change to normal map shader
+		currTier = 8;
+		vsON = gsON = fsON = true;
+		shTier[7].vertex_source(vsFile[7]);
+		shTier[7].geometry_source(gsFile[7]);
+		shTier[7].fragment_source(fsFile[7]);
+		shTier[7].install();
 		break;
 	case 'v': case 'V': // vertex shader on/off
 		if( currTier == 0 || currTier == 7 ) return;
@@ -552,7 +559,6 @@ void keyboard( unsigned char key, int x, int y ) {
 
 }
 
-
 /// Mouse
 /// @arg button which button activate the callback
 /// @arg state which state of the mouse
@@ -579,8 +585,8 @@ void mouse( int button, int state, int x, int y ) {
 		if( button == GLUT_LEFT_BUTTON || button == GLUT_RIGHT_BUTTON ) {
 			
 			if( button == GLUT_RIGHT_BUTTON ) {
-				arot[3] += aang[2];
-				arot[2] += aang[3];
+				arot[2] += aang[2];
+				arot[3] += aang[3];
 				if( arot[2] > 360. ) arot[2] -= 360.;
 				if( arot[2] < 0. ) arot[2] += 360.;
 				if( arot[3] > 360. ) arot[3] -= 360.;
@@ -602,14 +608,13 @@ void mouse( int button, int state, int x, int y ) {
 void motion( int x, int y ) {
 
 	if( buttonPressed == GLUT_LEFT_BUTTON || buttonPressed == GLUT_RIGHT_BUTTON ) {
-
 		
 		if( buttonPressed == GLUT_RIGHT_BUTTON ) {			
 
 			aang[3] = (x - xm) * 360 / (GLfloat) winWidth;
 			aang[2] = (y - ym) * 180 / (GLfloat) winHeight;
-		}
 
+		}
 
 		if( buttonPressed == GLUT_LEFT_BUTTON) {
 			int invert_y = (winHeight - y) - 1;
@@ -621,6 +626,10 @@ void motion( int x, int y ) {
 	}
 
 }
+
+/// Read Texture file PPM
+/// @arg name texture file name PPM
+/// @arg texId returned texture id
 
 void readTextureFile(  char* name , GLuint texId) {
 	string x;
@@ -666,14 +675,13 @@ void readTextureFile(  char* name , GLuint texId) {
 
 }
 
+/// Setup texture
 
 void setupTexture ( int t ) {
 
 	glActiveTexture(GL_TEXTURE2);
 	readTextureFile((char*)textureFile[t], tex_normalmap);
 }
-
-
 
 /// OpenGL Utility (GLUT) Setup
 
@@ -802,6 +810,18 @@ bool setupShaders( void ) {
 	shTier[6].vertex_source(vsFile[6]);
 	shTier[6].fragment_source(fsFile[6]);
 	shTier[6].install(true);
+
+	cout << "[Shader] Tier 8: Normal Map Shader:" << endl;
+
+	shTier[7].vertex_source(vsFile[7]);
+	shTier[7].fragment_source(fsFile[7]);
+	if( gsOK ) {
+		shTier[7].geometry_source(gsFile[7]);
+		shTier[7].set_geom_max_output_vertices( 9 );
+		shTier[7].set_geom_input_type(GL_TRIANGLES);
+		shTier[7].set_geom_output_type(GL_TRIANGLE_STRIP);
+	}
+	shTier[7].install(true);
 
 	return true;
 
