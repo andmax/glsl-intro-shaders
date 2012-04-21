@@ -27,6 +27,11 @@ extern "C" {
 #endif
 }
 
+#if !defined(GLUT_WHEEL_UP)
+#  define GLUT_WHEEL_UP   3
+#  define GLUT_WHEEL_DOWN 4
+#endif
+
 #include <stdio.h>
 #include <math.h> 
 
@@ -38,7 +43,7 @@ extern "C" {
 #include <string>
 #include <fstream>
 
-#define NUM_SHADERS 8
+#define NUM_SHADERS 9
 
 using std::cout;
 using std::cerr;
@@ -78,13 +83,13 @@ static bool applyTex = false; ///< Apply texture as normalmap (false) or as text
 // Vertex and Fragment Shader file names
 static const char vsFile[NUM_SHADERS][255] = { "helloworld.vert", "simple.vert", "cartoon.vert",
 					       "brick.vert", "phong.vert", "envmap.vert",
-					       "normalmap.vert", "spike.vert" };
+					       "normalmap.vert", "spike.vert", "wireframe.vert" };
 static const char gsFile[NUM_SHADERS][255] = { "helloworld.geom", "simple.geom", "------------",
 					       "----------", "----------", "----------",
-					       "----------", "spike.geom" };
+					       "----------", "spike.geom", "wireframe.geom" };
 static const char fsFile[NUM_SHADERS][255] = { "helloworld.frag", "simple.frag", "cartoon.frag",
 					       "brick.frag", "phong.frag", "envmap.frag",
-					       "normalmap.frag", "phong.frag" };
+					       "normalmap.frag", "phong.frag", "wireframe.frag" };
 
 /// ------------------------------------   TEXTURES   --------------------------------------
 
@@ -155,7 +160,8 @@ void showIH( void ) {
 			(currTier==5)?"Phong Shader":
 			(currTier==6)?"Environment Map Shader":
 			(currTier==7)?"Normal Map Shader":
-			(currTier==8)?"Spike Shader":"");
+			(currTier==8)?"Spike Shader":
+			(currTier==9)?"Wireframe Shader":"");
 		glWrite(-0.9, -0.4, str);
 
 		if( currTier > 0 ) {
@@ -323,6 +329,10 @@ void display( void ) {
 		shTier[6].set_uniform("applyTex", applyTex);
 
 	}
+	else if( currTier == 9 ) {
+	  
+	  shTier[8].set_uniform("viewport", (float)winWidth, (float)winHeight);
+	}
 
 	drawModel(modelId);
 	
@@ -453,7 +463,7 @@ void keyboard( unsigned char key, int x, int y ) {
 		shTier[6].fragment_source(fsFile[6]);
 		shTier[6].install();
 		break;
-	case '8': // change to normal map shader
+	case '8': // change to spike shader
 		currTier = 8;
 		vsON = gsON = fsON = true;
 		shTier[7].vertex_source(vsFile[7]);
@@ -461,8 +471,16 @@ void keyboard( unsigned char key, int x, int y ) {
 		shTier[7].fragment_source(fsFile[7]);
 		shTier[7].install();
 		break;
+	case '9': // change to wireframe shader
+		currTier = 9;
+		vsON = gsON = fsON = true;
+		shTier[8].vertex_source(vsFile[8]);
+		shTier[8].geometry_source(gsFile[8]);
+		shTier[8].fragment_source(fsFile[8]);
+		shTier[8].install();
+		break;
 	case 'v': case 'V': // vertex shader on/off
-		if( currTier == 0 || currTier == 7 ) return;
+		if( currTier == 0 || currTier == 7) return;
 		if( !fsON ) return;
 		vsON = !vsON;
 		if( !vsON && gsON && gsDepend() ) {
@@ -475,7 +493,7 @@ void keyboard( unsigned char key, int x, int y ) {
 		break;
 	case 'g': case 'G': // geometry shader on/off
 		if( !gsOK || (currTier != 1 && currTier != 2) ) return;
-		if( currTier == 7 ) return;
+		if( currTier == 7 || currTier == 8 ) return;
 		if( !vsON && !fsON ) return;
 		gsON = !gsON;
 		if( gsON && !vsON ) {
@@ -550,6 +568,12 @@ void keyboard( unsigned char key, int x, int y ) {
 	case 'q': case 'Q': case 27: // quit application
 		glutDestroyWindow( glutGetWindow() );
 		return;
+	case '+':
+	  zoom += 0.1;
+	  break;
+	case '-':
+	  zoom -= 0.1;
+	  break;
 	default: // any other key (just to avoid warnings)
 		cerr << "[Error] No key bind for " << key
 		     << " in (" << x << ", " << y << ")" << endl;
@@ -576,9 +600,11 @@ void mouse( int button, int state, int x, int y ) {
 			arcball_start(x,invert_y);
 		}
 
-		if( button == 3 ) // wheel up
+		if( button == GLUT_WHEEL_UP ) {// wheel up
 			zoom -= 0.1;
-		else if( button == 4 ) // wheel down
+		       
+		}
+		else if( button == GLUT_WHEEL_DOWN ) // wheel down
 			zoom += 0.1;
 
 	} else if( state == GLUT_UP ) {
@@ -812,7 +838,7 @@ bool setupShaders( void ) {
 	shTier[6].fragment_source(fsFile[6]);
 	shTier[6].install(true);
 
-	cout << "[Shader] Tier 8: Normal Map Shader:" << endl;
+	cout << "[Shader] Tier 8: Spike Shader:" << endl;
 
 	shTier[7].vertex_source(vsFile[7]);
 	shTier[7].fragment_source(fsFile[7]);
@@ -823,6 +849,19 @@ bool setupShaders( void ) {
 		shTier[7].set_geom_output_type(GL_TRIANGLE_STRIP);
 	}
 	shTier[7].install(true);
+
+	cout << "[Shader] Tier 9: Wireframe Shader:" << endl;
+
+	shTier[8].vertex_source(vsFile[8]);
+	shTier[8].fragment_source(fsFile[8]);
+	if( gsOK ) {
+		shTier[8].geometry_source(gsFile[8]);
+		shTier[8].set_geom_max_output_vertices( 3 );
+		shTier[8].set_geom_input_type(GL_TRIANGLES);
+		shTier[8].set_geom_output_type(GL_TRIANGLE_STRIP);
+	}
+	shTier[8].install(true);
+
 
 	return true;
 

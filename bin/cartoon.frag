@@ -17,7 +17,7 @@ void main(void) {
 	float intensity = dot( light_dir, normal );
 
 	if (intensity > 0.95)      color = 1.00 * gl_Color;
-	else if (intensity > 0.5)  color = 0.50 * gl_Color;
+	else if (intensity > 0.75)  color = 0.750 * gl_Color;
 	else if (intensity > 0.1)  color = 0.25 * gl_Color;
 	else                       color = 0.10 * gl_Color;
 

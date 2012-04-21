@@ -25,7 +25,7 @@ void main(void) {
 
 	/* Environment mapping */
 	float m = 2.0 * sqrt( r.x*r.x + r.y*r.y + (r.z+1.0)*(r.z+1.0) );
-	vec2 coord = -vec2(r.x/m + 0.5, r.y/m + 0.5);
+	vec2 coord = vec2(r.x/m + 0.5, r.y/m + 0.5);
 	vec4 env = texture2D( envMapTex, coord.st);
 	
 	gl_FragColor = env*1.0 + (gl_FrontLightModelProduct.sceneColor + la + ld + ls)*0.2;
