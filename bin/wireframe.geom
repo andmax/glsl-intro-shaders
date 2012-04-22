@@ -12,8 +12,8 @@
 #extension GL_EXT_gpu_shader4 : enable
 #extension GL_EXT_geometry_shader4: enable
 
-uniform vec2 viewport;
-varying vec2 v0, v1, v2;
+//uniform vec2 viewport;
+varying vec3 v0, v1, v2;
 varying vec3 normal, vert;
 
 void main() {
@@ -24,11 +24,12 @@ void main() {
 
 
   vec4 proj[3];
-  vec2 vertex[3];
+  vec3 vertex[3];
   for (int i = 0; i < gl_VerticesIn; ++i) {
     proj[i] = gl_ModelViewProjectionMatrix * gl_PositionIn[i];
     // compute fragcoord position
-    vertex[i] = ((proj[i].xy / proj[i].w) * 0.5 + vec2(0.5)) * viewport;  
+    //vertex[i] = ((proj[i].xy / proj[i].w) * 0.5 + vec2(0.5)) * viewport;
+    vertex[i] = (gl_ModelViewMatrix * gl_PositionIn[i]).xyz;
   }
 
   for (int i = 0; i < gl_VerticesIn; ++i) {

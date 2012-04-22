@@ -89,7 +89,7 @@ static const char gsFile[NUM_SHADERS][255] = { "helloworld.geom", "simple.geom",
 					       "----------", "spike.geom", "wireframe.geom" };
 static const char fsFile[NUM_SHADERS][255] = { "helloworld.frag", "simple.frag", "cartoon.frag",
 					       "brick.frag", "phong.frag", "envmap.frag",
-					       "normalmap.frag", "phong.frag", "wireframe.frag" };
+					       "normalmap.frag", "phong.frag", "wireframe-tubes.frag" };
 
 /// ------------------------------------   TEXTURES   --------------------------------------
 
@@ -331,7 +331,7 @@ void display( void ) {
 	}
 	else if( currTier == 9 ) {
 	  
-	  shTier[8].set_uniform("viewport", (float)winWidth, (float)winHeight);
+	  //shTier[8].set_uniform("viewport", (float)winWidth, (float)winHeight);
 	}
 
 	drawModel(modelId);
