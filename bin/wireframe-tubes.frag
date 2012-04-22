@@ -56,7 +56,7 @@ void main(void) {
   float theta = asin(dist); // tube_normal
   vec3 tube_normal = normalize(cos(theta)*u + sin(theta)*v);
   
-  tube_normal.z *= -1.0;
+  tube_normal.z = abs(tube_normal.z);
 
   vec4 color = vec4(0.3, 0.7, 0.7, 1.0);
 
