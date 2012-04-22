@@ -28,7 +28,7 @@ void main() {
   for (int i = 0; i < gl_VerticesIn; ++i) {
     proj[i] = gl_ModelViewProjectionMatrix * gl_PositionIn[i];
     // compute fragcoord position
-    vertex[i] = ((proj[i].xy / proj[i].w) * 0.5 + vec2(0.5)) * viewport;
+    vertex[i] = ((proj[i].xy / proj[i].w) * 0.5 + vec2(0.5)) * viewport;  
   }
 
   for (int i = 0; i < gl_VerticesIn; ++i) {
