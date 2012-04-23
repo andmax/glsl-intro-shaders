@@ -59,7 +59,7 @@ static const char vsFile[2][255] = { "display.vert", "compute.vert" };
 
 static const char fsFile[2][255] = { "display.frag", "compute.frag" };
 
-static GLfloat time_step = 0.01;
+static GLfloat time_step = 0.001;
 static GLint step = 0;
 
 static GLint point_size = 2;
@@ -116,7 +116,7 @@ void showIH( void ) {
 	sprintf(str, "[ / ] : point size" );
 	glWrite(-0.95, 0.8, str);
 
-	sprintf(str, "+ / - : animation speed" );
+	sprintf(str, "+ / - : animation speed %f", time_step );
 	glWrite(-0.95, 0.7, str);
 
 	glPopMatrix();
@@ -223,7 +223,7 @@ void computeCinematics( void ) {
 	glScalef(zoom, zoom, zoom);	
 	arcball_rotate();	
 	
-	GLfloat g[3] = {0.0, -1.0, 0.0};
+	GLfloat g[3] = {0.0, -0.98, 0.0};
 	
 	GLfloat mv[4][4];
 	glGetFloatv(GL_MODELVIEW_MATRIX, &mv[0][0]);
@@ -377,10 +377,10 @@ void keyboard( unsigned char key, int x, int y ) {
 
 	switch(key) {
 	case '+': 
-		time_step += 0.005;
+		time_step += 0.0005;
 		return;		
 	case '-': 
-		time_step -= 0.005;
+		time_step -= 0.0005;
 		if (time_step < 0)
 			time_step = 0;
 		return;
