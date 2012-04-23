@@ -76,6 +76,7 @@ const float PI = 3.141592654f;
 
 /// ------------------------------------   Functions   --------------------------------------
 
+bool setupShaders(void);
 
 /// OpenGL Write
 /// @arg x, y raster position
@@ -391,7 +392,10 @@ void keyboard( unsigned char key, int x, int y ) {
 	case ']': 
 		point_size++;
 		return;					
+	case 'r': case 'R': // quit application
 		
+	  setupShaders();
+		return;
 	case 'q': case 'Q': case 27: // quit application
 		//glutDestroyWindow( glutGetWindow() );
 		exit(0);

@@ -24,8 +24,8 @@ void main(void) {
 		* pow( max( dot(ref, eye_dir), 0.0 ), gl_FrontMaterial.shininess );
 
 	/* Environment mapping */
-	float m = 2.0 * sqrt( r.x*r.x + r.y*r.y + (r.z+1.0)*(r.z+1.0) );
-	vec2 coord = vec2(r.x/m + 0.5, r.y/m + 0.5);
+	// map from screen coords range [-1, 1] to texture coords [0,1]
+	vec2 coord = vec2(r.x/2.0 + 0.5, r.y/2.0 + 0.5);
 	vec4 env = texture2D( envMapTex, coord.st);
 	
 	gl_FragColor = env*1.0 + (gl_FrontLightModelProduct.sceneColor + la + ld + ls)*0.2;
