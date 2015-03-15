@@ -1,0 +1,2 @@
+This application demo shows some basic functionalities of shaders using GLSL. The demo was developed as a tutorial named: "Introduction to GPU Programming with GLSL"; for
+SIBGRAPI 2009 conference: http://www.matmidia.mat.puc-rio.br/sibgrapi2009/.
